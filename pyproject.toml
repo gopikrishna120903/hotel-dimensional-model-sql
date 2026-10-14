@@ -1,0 +1,9 @@
+[project]
+name = "hotel-dw"
+version = "1.0.0"
+description = "Kimball dimensional model for a hotel chain in plain SQL on DuckDB"
+requires-python = ">=3.10"
+dependencies = ["duckdb>=1.1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
