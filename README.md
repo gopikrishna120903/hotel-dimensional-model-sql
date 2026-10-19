@@ -6,6 +6,10 @@ A Kimball-style star schema for a six-hotel chain, written in **plain SQL** and 
 
 There is no Spark here on purpose. This project is about **data modeling and SQL**: choosing grains, designing dimensions, handling history, and proving the numbers reconcile.
 
+## Why I built this
+
+Most of my work has been building pipelines in Spark, but I've seen that clean pipelines don't help much if the data isn't modeled well for reporting. Numbers stop matching between reports, revenue gets double-counted, and nobody trusts the dashboards. I wanted to practice the modeling side on its own, using only SQL, so I picked a hotel chain because the questions are clear (occupancy, ADR, RevPAR) and the data has real modeling decisions in it. The two that took the most thought were keeping bookings and nightly occupancy as separate fact tables, and tracking loyalty tier changes with SCD Type 2 so old bookings still show the tier the guest had at the time.
+
 ## Model
 
 ```mermaid
