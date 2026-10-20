@@ -81,3 +81,13 @@ SELECT hotel_name,
        round(count(*) FILTER (WHERE stays >= 2) / count(*), 4) AS repeat_rate
 FROM stays
 GROUP BY hotel_name;
+
+-- Each hotel's best month by RevPAR.
+CREATE OR REPLACE VIEW mart.best_month_per_hotel AS
+SELECT hotel_name, year_month, occupancy_rate, adr, revpar
+FROM (
+    SELECT *,
+           row_number() OVER (PARTITION BY hotel_name ORDER BY revpar DESC) AS rn
+    FROM mart.hotel_monthly_kpis
+)
+WHERE rn = 1;

@@ -38,3 +38,17 @@ def test_cancellation_rises_with_lead_time(con):
         SELECT lead_time_bucket, sum(bookings * cancellation_rate) / sum(bookings)
         FROM mart.cancellation_by_lead_time GROUP BY lead_time_bucket""").fetchall())
     assert rates["0-7 days"] < rates["8-30 days"] < rates["31-90 days"]
+
+
+def test_best_month_view_has_one_row_per_hotel(con):
+    rows = con.execute("SELECT hotel_name FROM mart.best_month_per_hotel").fetchall()
+    assert len(rows) == 6
+    assert len({r[0] for r in rows}) == 6
+
+
+def test_best_month_is_really_the_highest(con):
+    better = scalar(con, """
+        SELECT count(*) FROM mart.best_month_per_hotel b
+        JOIN mart.hotel_monthly_kpis k USING (hotel_name)
+        WHERE k.revpar > b.revpar""")
+    assert better == 0
